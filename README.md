@@ -18,6 +18,12 @@ The Xcbwin-class is based on the [Xwindow-class](http://www.physik.uni-wuerzburg
 Xcbwin is designed to be downwardly compatible to the Xwindow-class, but uses [XCB](http://xcb.freedesktop.org/) (X protocol C-language Binding) which is intended to be a replacement for Xlib in the future.
 
 
+To be easy to compile the Xcbwin-class consists only of one file. This can be downloaded here:
+
+**[Download xcbwin.h](https://raw.github.com/jofalk/Xcbwin/master/xcbwin.h)**
+
+
+
 ## Usage
 
 It's easy and almost self-explanatory how to use Xcbwin:
