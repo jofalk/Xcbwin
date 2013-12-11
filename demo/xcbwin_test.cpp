@@ -1,4 +1,6 @@
 // Example for the use of the Xcbwin class
+// This Code produces a nice rainbow
+
 
 // must be compiled using the -lxcb flag!
 
