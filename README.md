@@ -43,6 +43,12 @@ Window.Close(); //Closes the Window
 
 ```
 
+To compile ỳou have to link the xcb-library:
+```
+g++ mycode.cpp -lxcb
+```
+
+
 For a better example look at the "demo" folder.
 
 
