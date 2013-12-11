@@ -37,6 +37,8 @@ Window.Close(); //Closes the Window
 
 ```
 
+For a better example look at the "demo" folder.
+
 
 ##Contributions
 
