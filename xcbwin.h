@@ -2,9 +2,9 @@
  *  \brief     A small class to produce graphic outputs
  *  \details   This class is provided for the computational physics lecture at the University Würzburg. It's a easy tool for the students to produce simple graphic outputs.
  For bugreports please contact the author.
- *  \author    Johannes Falk, jfalk@physik.uni-wuerzburg.de
- *  \version   0.2 (beta) // beta, since the students already work with it ;-)
- *  \date      27.11.2013
+ *  \author    Johannes Falk, johannes.falk(_at_)physik.uni-wuerzburg.de
+ *  \version   0.3 // beta, since the students already work with it ;-)
+ *  \date      11.12.2013
  *  \bug  no known bugs     
  *  \todo create function to draw circles
  *  \todo create function to write text
