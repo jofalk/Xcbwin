@@ -84,9 +84,13 @@ public:
 
 
   //! Draws a line with the given specifications
-
-  
-
+  /** Draws a line at the given start and end points using the current color
+      \param x0 x-Position of the start point
+      \param y0 y-Position of the start point
+      \param x1 x-Position of the end point
+      \param y1 y-Position of the end point
+      \sa SetColor(sColor scol)
+  */
   void DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) const;
 
 
@@ -109,6 +113,23 @@ public:
       \param height height of the rectangle
   */
   void DrawFilledRectangle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const;
+
+  //! Draw a circle with the given specifications
+  /** 
+      \param x x-Position of the edge
+      \param y y-Position of the edge
+      \param width of the rectangle
+      \param height height of the rectangle
+  */
+  void DrawCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const;
+  //! Draw a filled circle with the given specifications
+  /** 
+      \param x x-Position of the edge
+      \param y y-Position of the edge
+      \param width of the rectangle
+      \param height height of the rectangle
+  */
+  void DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const;
 
   //! Set the color that is used for the next paintings
   /** 
@@ -470,10 +491,24 @@ void Xcbwin::DrawFilledRectangle(uint16_t x,uint16_t y, uint16_t iwidth, uint16_
 }
 
 
+void Xcbwin::DrawCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const {
+  xcb_arc_t arcs[] = {static_cast<int16_t>(x), static_cast<int16_t>(y), static_cast<int16_t>(width), static_cast<int16_t>(height), 0, 360 << 6};
+
+  xcb_poly_arc (connection, pixmap, gcontextcurrent, 1, arcs);
+  xcb_poly_arc (connection, window, gcontextcurrent, 1, arcs);
+
+  CheckForEvent();
+}
 
 
+void Xcbwin::DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const {
+  xcb_arc_t arcs[] = {static_cast<int16_t>(x), static_cast<int16_t>(y), static_cast<int16_t>(width), static_cast<int16_t>(height), 0, 360 << 6};
 
+  xcb_poly_fill_arc (connection, pixmap, gcontextcurrent, 1, arcs);
+  xcb_poly_fill_arc (connection, window, gcontextcurrent, 1, arcs);
 
+  CheckForEvent();
+}
 
 
 void Xcbwin::Wait() const { //Just to be compatible to XWindow
@@ -715,4 +750,3 @@ xcb_gcontext_t  Xcbwin::GenerateContext ( uint32_t color) const {
 
 
 #endif // _XCBWIN_XCBWIN_H_
-
