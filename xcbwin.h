@@ -30,7 +30,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *  \version   0.3 // beta, since the students already work with it ;-)
  *  \date      11.12.2013
  *  \bug  no known bugs     
- *  \todo create function to draw circles
  *  \todo create function to write text
  *  \todo simplify code (put poll-event in own function)
  *  \attention lo compile this class, you need to add the xcb-library using the -lxcb flag
