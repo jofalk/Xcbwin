@@ -516,6 +516,7 @@ void Xcbwin::Wait() const { //Just to be compatible to XWindow
 
 void Xcbwin::Waitev() const {
 
+  Flush();
   
   xcb_generic_event_t *event;
   while((event = xcb_wait_for_event(connection))) //wait until event occurs
