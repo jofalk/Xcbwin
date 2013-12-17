@@ -144,7 +144,7 @@ public:
       \param y y-Position of the bottom left corner
       \param str The string to display
   */
-  void DrawText( uint16_t x, uint16_t y, const std::string &str );
+  void DrawText( uint16_t x, uint16_t y, const string &str );
 
 
   //! Set the color that is used for the next paintings
