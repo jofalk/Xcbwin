@@ -9,7 +9,7 @@ Xcbwin is a lightweight class that provides rudimental and fast methods to produ
 Currently the class provides methods to:
 
 
-*  Draw Lines, Circles, Points and Rectangles
+*  Draw Lines, Circles, Points, Rectangles and Text
 *  Change the color
 *  Handle keyboard events
 
