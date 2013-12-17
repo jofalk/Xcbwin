@@ -41,11 +41,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _XCBWIN_XCBWIN_H_
 
 
+
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <xcb/xcb.h>
+#include <unistd.h>
+#include <inttypes.h>
+//#include <png.h> //currently not used
 #include <stdlib.h>
 #include <stdio.h>
 #include <xcb/xcb.h>
 
-
+using namespace std;
 
 
 class Xcbwin{
@@ -129,6 +137,15 @@ public:
       \param height height of the rectangle
   */
   void DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const;
+
+  //! Draw text with the given specifications
+  /**
+      \param x x-Position of the bottom left corner
+      \param y y-Position of the bottom left corner
+      \param str The string to display
+  */
+  void DrawText( uint16_t x, uint16_t y, const std::string &str );
+
 
   //! Set the color that is used for the next paintings
   /** 
@@ -248,8 +265,6 @@ private:
 
   xcb_connection_t *connection; /**< holds the connection*/
 
-
-  
   
   /**private function used to set color */
   void SetColor( uint32_t color);
@@ -274,20 +289,6 @@ private:
 
 // .cpp file belonging to Xcbwin class
 // for further information see header file
-
-
-#include <iostream>
-#include <cstring>
-#include <cmath>
-#include <xcb/xcb.h>
-//#include "xcbwin.h"
-#include <unistd.h>
-#include <inttypes.h>
-//#include <png.h> //currently not used
-
-using namespace std;
-
-
 
 
 Xcbwin::Xcbwin(bool v):VERBOSE(v), closed(true) {
@@ -381,8 +382,6 @@ void Xcbwin::Open(const uint16_t iwidth,const  uint16_t iheight){
   gcontextarray[kLIGHTGREY] = GenerateContext(SetColor(40000, 40000, 40000));
   gcontextarray[kWHITE] = GenerateContext(SetColor(65535, 65535, 65535));
 
-
-
   //______________
   //now we generate a context to draw on the screen
   //this is used, if a color is definde, that is not cached
@@ -413,11 +412,6 @@ void Xcbwin::Open(const uint16_t iwidth,const  uint16_t iheight){
   wm_delete_window_cookie = xcb_intern_atom(connection, 0, 16, "WM_DELETE_WINDOW");
   delete_window_reply = xcb_intern_atom_reply(connection, wm_delete_window_cookie, 0);
   // 
-
-
-
-
-  
 }
 
 
@@ -509,6 +503,14 @@ void Xcbwin::DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t 
   CheckForEvent();
 }
 
+void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) {
+  const char *label = str.c_str();
+
+  xcb_image_text_8_checked(connection, strlen(label), pixmap, gcontextcurrent, x, y, label );
+  xcb_image_text_8_checked(connection, strlen(label), window, gcontextcurrent, x, y, label );
+
+  CheckForEvent();
+}
 
 void Xcbwin::Wait() const { //Just to be compatible to XWindow
   Waitev();
@@ -650,8 +652,7 @@ Xcbwin::~Xcbwin(){ // if connection is not yet closed, do it
 void Xcbwin::Close(){ //Close connection
   if(connection){
     xcb_disconnect(connection);
-    closed = true;
-    
+    closed = true;    
   }
 }
 
