@@ -523,13 +523,20 @@ void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) const {
 }
 
 void Xcbwin::DrawFunction( double (*funcPtr)(double), double minx, double maxx, double miny, double maxy ) const {
+  // calculate the first point, and use it to store the last drawn point, for drawing lines
+  double valx = minx;
+  double valy = funcPtr(valx);
+  uint16_t lx = 0;
+  uint16_t ly = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
   // calculate one point for each pixel on the screen
   for (uint16_t px = 0; px < width; ++px) {
      double valx = minx + (maxx - minx) * static_cast<double>(px) / static_cast<double>(width);
      double valy = funcPtr(valx);
      // care that min and max y are swapped, since the screen coord system is up to down.
      uint16_t py = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
-     DrawPoint(px, py);
+     DrawLine(lx, ly, px, py);
+     lx = px;
+     ly = py;
   }
 }
 
