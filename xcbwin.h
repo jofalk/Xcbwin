@@ -144,7 +144,17 @@ public:
       \param y y-Position of the bottom left corner
       \param str The string to display
   */
-  void DrawText( uint16_t x, uint16_t y, const string &str );
+  void DrawText( uint16_t x, uint16_t y, const string &str ) const ;
+
+  //! Draws a given function double function(double)
+  /**
+      \param funcPtr The pointer on the function
+      \param minx The lower x-interval value
+      \param maxx The upper x-interval value
+      \param miny The lower y-interval value
+      \param maxy The upper y-interval value
+  */
+  void DrawFunction( double (*funcPtr)(double), double minx, double maxx, double miny, double maxy ) const;
 
 
   //! Set the color that is used for the next paintings
@@ -503,13 +513,24 @@ void Xcbwin::DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t 
   CheckForEvent();
 }
 
-void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) {
+void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) const {
   const char *label = str.c_str();
 
   xcb_image_text_8_checked(connection, strlen(label), pixmap, gcontextcurrent, x, y, label );
   xcb_image_text_8_checked(connection, strlen(label), window, gcontextcurrent, x, y, label );
 
   CheckForEvent();
+}
+
+void Xcbwin::DrawFunction( double (*funcPtr)(double), double minx, double maxx, double miny, double maxy ) const {
+  // calculate one point for each pixel on the screen
+  for (uint16_t px = 0; px < width; ++px) {
+     double valx = minx + (maxx - minx) * static_cast<double>(px) / static_cast<double>(width);
+     double valy = funcPtr(valx);
+     // care that min and max y are swapped, since the screen coord system is up to down.
+     uint16_t py = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
+     DrawPoint(px, py);
+  }
 }
 
 void Xcbwin::Wait() const { //Just to be compatible to XWindow
