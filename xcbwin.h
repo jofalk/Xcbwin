@@ -43,6 +43,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <cmath>
 #include <xcb/xcb.h>
@@ -51,7 +52,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //#include <png.h> //currently not used
 #include <stdlib.h>
 #include <stdio.h>
-#include <xcb/xcb.h>
 
 using namespace std;
 
@@ -224,7 +224,8 @@ public:
   void Clear();
 
 
- 
+  //! Function to make a screenshot
+  void Screenshot();
 
 private:
   uint16_t width; /**< width of the window */
@@ -748,6 +749,36 @@ xcb_gcontext_t  Xcbwin::GenerateContext ( uint32_t color) const {
 
 }
 
+void Xcbwin::Screenshot() {
+  xcb_get_image_cookie_t imgcookie = xcb_get_image(connection, XCB_IMAGE_FORMAT_XY_PIXMAP, pixmap, 0, 0, width, height, static_cast<uint32_t>(-1));
+  xcb_get_image_reply_t *imgreply = xcb_get_image_reply(connection, imgcookie, NULL);
+  uint8_t *data = xcb_get_image_data(imgreply);
+  int size = xcb_get_image_data_length(imgreply);
 
+  //FILE *f = fopen("screenshot.ppm", "wb");
+  //fprintf(f, "P6\n%i %i 255\n", width, height);
+  std::ofstream f("screenshot.ppm");
+  f << "P3\n" << width << " " << height << " 255\n";
+  uint32_t dataIterator = 0;
+
+  for (uint16_t y = 0; y < height; y++) {
+    for (uint16_t x = 0; x < width; x++) {
+	dataIterator = x * height + y;
+	f << static_cast<int>(data[dataIterator]) << " ";
+	f << static_cast<int>(data[dataIterator + size / 3]) << " ";
+	f << static_cast<int>(data[dataIterator + (2 * size) / 3]) << " ";
+	dataIterator++;
+    }
+  }
+  std::cout << size << std::endl;
+  //for (int i = 0; i < size; i++) {
+  //   f << static_cast<int>(data[size]) << " ";
+  //}
+  std::cout << " h: " << height << " width: " << width << std::endl;
+
+  //f.write(reinterpret_cast<char*>(data), size * sizeof(uint8_t));
+  f.close();
+  //fclose(f);
+}
 
 #endif // _XCBWIN_XCBWIN_H_
