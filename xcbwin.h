@@ -43,6 +43,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <cmath>
 #include <xcb/xcb.h>
