@@ -10,6 +10,7 @@ Currently the class provides methods to:
 
 
 *  Draw Lines, Circles, Points, Rectangles and Text
+*  Plot Functions
 *  Change the color
 *  Handle keyboard events
 
@@ -60,7 +61,7 @@ Currently the official Xcb-documentation is sometimes not very helpful. Hence a 
 
 ## License
 
-Xcblib is published under the MIT license. See the LICENSE file for more info.
+Xcbwin is published under the MIT license. See the LICENSE file for more info.
 
 
 ##Contact
