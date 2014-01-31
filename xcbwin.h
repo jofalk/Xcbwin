@@ -802,5 +802,11 @@ f.write(reinterpret_cast<char*>(pos), sizeof(uint8_t));
 
 }
 
+ 
+  
+  f.close();
+  
+}
+
 
 #endif // _XCBWIN_XCBWIN_H_
