@@ -234,6 +234,8 @@ public:
   void Clear();
 
 
+  //! Function to make a screenshot
+  void Screenshot();
  
 
 private:
@@ -776,6 +778,28 @@ xcb_gcontext_t  Xcbwin::GenerateContext ( uint32_t color) const {
 
 }
 
+
+void Xcbwin::Screenshot() {
+  xcb_get_image_cookie_t imgcookie = xcb_get_image(connection, XCB_IMAGE_FORMAT_Z_PIXMAP, pixmap, 0, 0, width, height, static_cast<uint32_t>(-1));
+  xcb_get_image_reply_t *imgreply = xcb_get_image_reply(connection, imgcookie, NULL);
+  uint8_t *data = xcb_get_image_data(imgreply);
+  int size = xcb_get_image_data_length(imgreply);
+
+  std::ofstream f("screenshot.ppm");
+  f << "P6\n" << width << " " << height << " 255\n";
+  uint32_t dataIterator = 0;
+
+ 
+  uint8_t *max = data+static_cast<uint64_t>(height)*static_cast<uint64_t>(width)*4;
+for(uint8_t *pos = data+2; pos < max ;pos+=6) {
+
+f.write(reinterpret_cast<char*>(pos), sizeof(uint8_t));
+	f.write(reinterpret_cast<char*>(--pos), sizeof(uint8_t));
+	f.write(reinterpret_cast<char*>(--pos), sizeof(uint8_t));
+
+
+
+}
 
 
 #endif // _XCBWIN_XCBWIN_H_
