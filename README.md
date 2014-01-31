@@ -9,8 +9,9 @@ Xcbwin is a lightweight class that provides rudimental and fast methods to produ
 Currently the class provides methods to:
 
 
-*  Draw Lines, Circles, Points, Rectangles and Text
-*  Plot Functions
+*  Draw lines, circles, points, rectangles and text
+*  Plot functions
+*  Save screenshot of drawing
 *  Change the color
 *  Handle keyboard events
 
@@ -38,6 +39,7 @@ Window.Open(400,400); //Opens a Window of size 400x400
 Window.Black(); //Sets the drawing-color to black
 Window.DrawRectangle(20,20,30,30); //Draws a Rectangle
 Window.Wait(); // Waits for a keypress-event
+Window.Screenshot(); //Saves a screenshot of the drawing
 Window.Close(); //Closes the Window
 
 }
