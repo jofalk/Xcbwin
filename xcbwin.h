@@ -1,3 +1,5 @@
+
+
 /*
 The MIT License (MIT)
 
@@ -27,7 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *  \details   This class is provided for the computational physics lecture at the University Würzburg. It's a easy tool for the students to produce simple graphic outputs.
  For bugreports please contact the author.
  *  \author    Johannes Falk, johannes.falk(_at_)physik.uni-wuerzburg.de
- *  \version   0.3 // beta, since the students already work with it ;-)
+ *  \version   0.3 // beta, since the students already work with it 
  *  \date      11.12.2013
  *  \bug  no known bugs     
  *  \todo create function to write text
@@ -43,6 +45,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <cmath>
 #include <xcb/xcb.h>
@@ -51,7 +54,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //#include <png.h> //currently not used
 #include <stdlib.h>
 #include <stdio.h>
-#include <xcb/xcb.h>
 
 using namespace std;
 
@@ -144,17 +146,7 @@ public:
       \param y y-Position of the bottom left corner
       \param str The string to display
   */
-  void DrawText( uint16_t x, uint16_t y, const string &str ) const ;
-
-  //! Draws a given function double function(double)
-  /**
-      \param funcPtr The pointer on the function
-      \param minx The lower x-interval value
-      \param maxx The upper x-interval value
-      \param miny The lower y-interval value
-      \param maxy The upper y-interval value
-  */
-  void DrawFunction( double (*funcPtr)(double), double minx, double maxx, double miny, double maxy ) const;
+  void DrawText( uint16_t x, uint16_t y, const string &str );
 
 
   //! Set the color that is used for the next paintings
@@ -234,7 +226,8 @@ public:
   void Clear();
 
 
- 
+  //! Function to make a screenshot
+  void Screenshot();
 
 private:
   uint16_t width; /**< width of the window */
@@ -513,31 +506,13 @@ void Xcbwin::DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t 
   CheckForEvent();
 }
 
-void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) const {
+void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) {
   const char *label = str.c_str();
 
   xcb_image_text_8_checked(connection, strlen(label), pixmap, gcontextcurrent, x, y, label );
   xcb_image_text_8_checked(connection, strlen(label), window, gcontextcurrent, x, y, label );
 
   CheckForEvent();
-}
-
-void Xcbwin::DrawFunction( double (*funcPtr)(double), double minx, double maxx, double miny, double maxy ) const {
-  // calculate the first point, and use it to store the last drawn point, for drawing lines
-  double valx = minx;
-  double valy = funcPtr(valx);
-  uint16_t lx = 0;
-  uint16_t ly = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
-  // calculate one point for each pixel on the screen
-  for (uint16_t px = 0; px < width; ++px) {
-     double valx = minx + (maxx - minx) * static_cast<double>(px) / static_cast<double>(width);
-     double valy = funcPtr(valx);
-     // care that min and max y are swapped, since the screen coord system is up to down.
-     uint16_t py = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
-     DrawLine(lx, ly, px, py);
-     lx = px;
-     ly = py;
-  }
 }
 
 void Xcbwin::Wait() const { //Just to be compatible to XWindow
@@ -776,6 +751,36 @@ xcb_gcontext_t  Xcbwin::GenerateContext ( uint32_t color) const {
 
 }
 
+void Xcbwin::Screenshot() {
+  xcb_get_image_cookie_t imgcookie = xcb_get_image(connection, XCB_IMAGE_FORMAT_Z_PIXMAP, pixmap, 0, 0, width, height, static_cast<uint32_t>(-1));
+  xcb_get_image_reply_t *imgreply = xcb_get_image_reply(connection, imgcookie, NULL);
+  uint8_t *data = xcb_get_image_data(imgreply);
+  int size = xcb_get_image_data_length(imgreply);
 
+  std::ofstream f("screenshot.ppm");
+  f << "P6\n" << width << " " << height << " 255\n";
+  uint32_t dataIterator = 0;
+
+ 
+  uint8_t *max = data+static_cast<uint64_t>(height)*static_cast<uint64_t>(width)*4;
+for(uint8_t *pos = data+2; pos < max ;pos+=6) {
+
+f.write(reinterpret_cast<char*>(pos), sizeof(uint8_t));
+	f.write(reinterpret_cast<char*>(--pos), sizeof(uint8_t));
+	f.write(reinterpret_cast<char*>(--pos), sizeof(uint8_t));
+
+
+
+}
+
+
+  
+  
+  f.close();
+  
+}
 
 #endif // _XCBWIN_XCBWIN_H_
+
+
+
