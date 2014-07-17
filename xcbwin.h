@@ -498,7 +498,7 @@ void Xcbwin::DrawFilledRectangle(uint16_t x,uint16_t y, uint16_t iwidth, uint16_
 
 
 void Xcbwin::DrawCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const {
-  xcb_arc_t arcs[] = {static_cast<int16_t>(x), static_cast<int16_t>(y), static_cast<uint16_t>(width), static_cast<uint16_t>(height), 0, 360 << 6};
+  xcb_arc_t arcs[] = {{static_cast<int16_t>(x), static_cast<int16_t>(y), static_cast<uint16_t>(width), static_cast<uint16_t>(height), 0, 360 << 6}};
 
   xcb_poly_arc (connection, pixmap, gcontextcurrent, 1, arcs);
   xcb_poly_arc (connection, window, gcontextcurrent, 1, arcs);
@@ -508,7 +508,7 @@ void Xcbwin::DrawCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height
 
 
 void Xcbwin::DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t height) const {
-  xcb_arc_t arcs[] = {static_cast<int16_t>(x), static_cast<int16_t>(y), static_cast<uint16_t>(width), static_cast<uint16_t>(height), 0, 360 << 6};
+  xcb_arc_t arcs[] = {{static_cast<int16_t>(x), static_cast<int16_t>(y), static_cast<uint16_t>(width), static_cast<uint16_t>(height), 0, 360 << 6}};
 
   xcb_poly_fill_arc (connection, pixmap, gcontextcurrent, 1, arcs);
   xcb_poly_fill_arc (connection, window, gcontextcurrent, 1, arcs);
