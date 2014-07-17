@@ -530,13 +530,13 @@ void Xcbwin::DrawFunction( double (*funcPtr)(double), double minx, double maxx, 
   double valx = minx;
   double valy = funcPtr(valx);
   uint16_t lx = 0;
-  uint16_t ly = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
+  uint16_t ly = static_cast<uint16_t>((valy - maxy) * static_cast<double>(height) / (miny - maxy));
   // calculate one point for each pixel on the screen
   for (uint16_t px = 0; px < width; ++px) {
      double valx = minx + (maxx - minx) * static_cast<double>(px) / static_cast<double>(width);
      double valy = funcPtr(valx);
      // care that min and max y are swapped, since the screen coord system is up to down.
-     uint16_t py = (valy - maxy) * static_cast<double>(height) / (miny - maxy);
+     uint16_t py = static_cast<uint16_t>((valy - maxy) * static_cast<double>(height) / (miny - maxy));
      DrawLine(lx, ly, px, py);
      lx = px;
      ly = py;
@@ -784,11 +784,11 @@ void Xcbwin::Screenshot() {
   xcb_get_image_cookie_t imgcookie = xcb_get_image(connection, XCB_IMAGE_FORMAT_Z_PIXMAP, pixmap, 0, 0, width, height, static_cast<uint32_t>(-1));
   xcb_get_image_reply_t *imgreply = xcb_get_image_reply(connection, imgcookie, NULL);
   uint8_t *data = xcb_get_image_data(imgreply);
-  int size = xcb_get_image_data_length(imgreply);
+  //int size = xcb_get_image_data_length(imgreply);
 
   std::ofstream f("screenshot.ppm");
   f << "P6\n" << width << " " << height << " 255\n";
-  uint32_t dataIterator = 0;
+//  uint32_t dataIterator = 0;
 
  
   uint8_t *max = data+static_cast<uint64_t>(height)*static_cast<uint64_t>(width)*4;
