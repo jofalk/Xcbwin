@@ -519,8 +519,8 @@ void Xcbwin::DrawFilledCircle( uint16_t x, uint16_t y, uint16_t width, uint16_t 
 void Xcbwin::DrawText( uint16_t x, uint16_t y, const std::string &str ) const {
   const char *label = str.c_str();
 
-  xcb_image_text_8_checked(connection, strlen(label), pixmap, gcontextcurrent, x, y, label );
-  xcb_image_text_8_checked(connection, strlen(label), window, gcontextcurrent, x, y, label );
+  xcb_image_text_8_checked(connection, static_cast<uint8_t>(strlen(label)), pixmap, gcontextcurrent, x, y, label );
+  xcb_image_text_8_checked(connection, static_cast<uint8_t>(strlen(label)), window, gcontextcurrent, x, y, label );
 
   CheckForEvent();
 }
