@@ -53,6 +53,6 @@ int main() {
   }
   doPercolationStep(&sites, PROP, y);
   }
-  Window.WaitForKeypress();
   Window.Screenshot();
+  Window.WaitForKeypress();
 }
